@@ -113,11 +113,12 @@ class ReportTest extends TestCase
         $this->actingAs($owner)
             ->get(route('adopsi.index'))
             ->assertOk()
-            ->assertSee('Riwayat Adopsi Saya')
+            ->assertSee('Riwayat Adopsi')
             ->assertSee('Riwayat')
             ->assertSee('Mochi Sendiri')
             ->assertDontSee('Poppy Orang Lain')
-            ->assertDontSee('Laporan saya');
+            ->assertDontSee('Laporan saya')
+            ->assertDontSee('Adopsi saya');
     }
 
     public function test_customer_report_route_is_not_available(): void

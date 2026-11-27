@@ -10,9 +10,6 @@
                 <a href="{{ route('home') }}" class="text-sm font-semibold {{ request()->routeIs('home') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Beranda</a>
                 <a href="{{ route('hewan.index') }}" class="text-sm font-semibold {{ request()->routeIs('hewan.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Cari sahabat</a>
                 @auth
-                    @can('mengajukan adopsi')
-                        <a href="{{ route('adopsi.index') }}" class="text-sm font-semibold {{ request()->routeIs('adopsi.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Adopsi saya</a>
-                    @endcan
                     @can('kelola hewan')
                         <a href="{{ route('admin.hewan.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Kelola hewan</a>
                     @endcan
@@ -74,9 +71,6 @@
             <a href="{{ route('home') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#365b45]">Beranda</a>
             <a href="{{ route('hewan.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Cari sahabat</a>
             @auth
-                @can('mengajukan adopsi')
-                    <a href="{{ route('adopsi.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Adopsi saya</a>
-                @endcan
                 @can('kelola hewan')
                     <a href="{{ route('admin.hewan.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Kelola hewan</a>
                 @endcan
