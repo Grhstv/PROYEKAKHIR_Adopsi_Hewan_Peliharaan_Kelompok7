@@ -3,11 +3,10 @@
         @if ($hewan->foto_asli)
             <img src="{{ $hewan->foto_asli }}" alt="Foto {{ $hewan->nama }}" class="h-56 w-full object-cover transition duration-500 group-hover:scale-[1.03]" loading="lazy">
         @else
-            @php
-                $ikonHewan = ['kucing' => '🐈', 'anjing' => '🐕', 'kelinci' => '🐇', 'burung' => '🦜', 'hamster' => '🐹'];
-            @endphp
             <div class="grid h-56 w-full place-items-center bg-gradient-to-br from-[#eef2e9] via-[#f5f2e7] to-[#f6e8dd]" aria-label="Foto {{ $hewan->nama }} belum tersedia">
-                <span class="grid h-28 w-28 place-items-center rounded-full bg-white/70 text-6xl shadow-sm" aria-hidden="true">{{ $ikonHewan[$hewan->kategori->slug] ?? '🐾' }}</span>
+                <span class="grid h-28 w-28 place-items-center rounded-full bg-white/70 text-[#52735c] shadow-sm">
+                    <x-paw-mark class="h-14 w-14" />
+                </span>
             </div>
         @endif
         <span class="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/80 bg-white/95 px-3 py-1.5 text-xs font-semibold {{ $hewan->status === \App\Models\Hewan::TERSEDIA ? 'text-[#42654a]' : 'text-[#777f77]' }}">

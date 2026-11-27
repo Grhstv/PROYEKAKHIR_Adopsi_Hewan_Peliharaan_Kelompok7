@@ -33,7 +33,7 @@
 
             <footer class="border-t border-[#e5e8df] bg-white">
                 <div class="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-7 text-sm text-[#788176] sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
-                    <a href="{{ route('home') }}" class="font-semibold text-[#365b45]">🐾 {{ config('app.name', 'PetHaven') }}</a>
+                    <a href="{{ route('home') }}" class="inline-flex items-center gap-2 font-semibold text-[#365b45]"><x-paw-mark class="h-5 w-5" /> {{ config('app.name', 'PetHaven') }}</a>
                     <p>&copy; {{ date('Y') }} PetHaven. Setiap sahabat layak mendapat rumah yang penuh kasih.</p>
                 </div>
             </footer>

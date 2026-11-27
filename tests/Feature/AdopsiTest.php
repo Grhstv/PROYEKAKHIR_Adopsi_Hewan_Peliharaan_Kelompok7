@@ -6,6 +6,8 @@ use App\Models\Adopsi;
 use App\Models\Hewan;
 use App\Models\Kategori;
 use App\Models\User;
+use Database\Seeders\HewanSeeder;
+use Database\Seeders\KategoriSeeder;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -70,6 +72,27 @@ class AdopsiTest extends TestCase
             ->assertOk()
             ->assertSee('Tentang Mochi')
             ->assertSee('Belum vaksin');
+    }
+
+    public function test_admin_dapat_melihat_template_deskripsi_iklan()
+    {
+        $this->actingAs($this->user('admin'))
+            ->get(route('admin.hewan.create'))
+            ->assertOk()
+            ->assertSee('Gunakan format iklan')
+            ->assertSee('Keterangan jika tanpa sertifikat')
+            ->assertSee('Metode Serah Terima');
+    }
+
+    public function test_data_contoh_menyediakan_lebih_banyak_hewan_dengan_foto()
+    {
+        $this->seed([KategoriSeeder::class, HewanSeeder::class]);
+
+        $this->assertDatabaseHas('hewans', ['nama' => 'Poppy']);
+        $this->assertDatabaseHas('hewans', [
+            'nama' => 'Poppy',
+            'foto_url' => 'https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=900&q=85',
+        ]);
     }
 
     public function test_01_tamu_bisa_melihat_daftar_hewan()

@@ -60,7 +60,7 @@
                 @include('hewan._card', ['hewan' => $hewan])
             @empty
                 <div class="col-span-full rounded-2xl border border-dashed border-[#d8dfd4] bg-white px-6 py-16 text-center">
-                    <span class="text-4xl" aria-hidden="true">🔎</span>
+                    <svg class="mx-auto h-10 w-10 text-[#8ba18a]" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
                     <h2 class="mt-4 font-serif text-2xl font-semibold text-[#314638]">Belum ada yang cocok</h2>
                     <p class="mt-2 text-sm text-[#788176]">Coba ubah kata pencarian atau pilih filter yang lain.</p>
                     <a href="{{ route('hewan.index') }}" class="mt-5 inline-flex rounded-xl bg-[#365b45] px-5 py-3 text-sm font-semibold text-white hover:bg-[#294936]">Tampilkan semua hewan</a>
