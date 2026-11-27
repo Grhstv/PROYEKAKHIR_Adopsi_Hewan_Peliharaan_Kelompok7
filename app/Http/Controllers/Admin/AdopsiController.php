@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Adopsi;
 use App\Models\Hewan;
+use App\Models\HewanMutation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,7 +29,7 @@ class AdopsiController extends Controller
     {
         $data = $request->validate(['catatan' => ['nullable', 'string', 'max:500']]);
 
-        $galat = DB::transaction(function () use ($adopsi, $data) {
+        $galat = DB::transaction(function () use ($adopsi, $data, $request) {
             $a = Adopsi::whereKey($adopsi->id)->lockForUpdate()->firstOrFail();
             if ($a->status !== Adopsi::MENUNGGU) {
                 return 'Pengajuan ini sudah diproses.';
@@ -40,20 +41,27 @@ class AdopsiController extends Controller
             }
 
             $a->update([
-                'status'        => Adopsi::DISETUJUI,
+                'status' => Adopsi::DISETUJUI,
                 'catatan_admin' => $data['catatan'] ?? null,
-                'diproses_at'   => now(),
+                'diproses_at' => now(),
             ]);
             $h->update(['status' => Hewan::TERADOPSI]);
+            HewanMutation::create([
+                'hewan_id' => $h->id,
+                'nama_hewan' => $h->nama,
+                'jenis' => HewanMutation::TERADOPSI,
+                'user_id' => $request->user()->id,
+                'keterangan' => 'Hewan diadopsi oleh '.$a->user->name.'.',
+            ]);
 
             // Pengajuan lain untuk hewan yang sama otomatis ditolak.
             Adopsi::where('hewan_id', $h->id)
                 ->where('id', '!=', $a->id)
                 ->where('status', Adopsi::MENUNGGU)
                 ->update([
-                    'status'        => Adopsi::DITOLAK,
+                    'status' => Adopsi::DITOLAK,
                     'catatan_admin' => 'Hewan sudah diadopsi oleh pemohon lain.',
-                    'diproses_at'   => now(),
+                    'diproses_at' => now(),
                 ]);
 
             return null;
@@ -73,9 +81,9 @@ class AdopsiController extends Controller
         }
 
         $adopsi->update([
-            'status'        => Adopsi::DITOLAK,
+            'status' => Adopsi::DITOLAK,
             'catatan_admin' => $data['catatan'],
-            'diproses_at'   => now(),
+            'diproses_at' => now(),
         ]);
 
         return back()->with('success', 'Pengajuan ditolak.');

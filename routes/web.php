@@ -3,18 +3,22 @@
 use App\Http\Controllers\Admin\AdopsiController as AdminAdopsiController;
 use App\Http\Controllers\Admin\HewanController as AdminHewanController;
 use App\Http\Controllers\Admin\KategoriController as AdminKategoriController;
+use App\Http\Controllers\Admin\SyaratKetentuanController as AdminSyaratKetentuanController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\AdopsiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HewanController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SyaratKetentuanController;
 use Illuminate\Support\Facades\Route;
 
 /* ---------- Publik ---------- */
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/hewan', [HewanController::class, 'index'])->name('hewan.index');
 Route::get('/hewan/{hewan}', [HewanController::class, 'show'])->name('hewan.show');
+Route::get('/syarat-ketentuan', [SyaratKetentuanController::class, 'show'])->name('syarat-ketentuan.show');
 Route::view('/katalog-live', 'klien.katalog')->name('katalog.live'); // klien Fetch API
 
 /* ---------- Wajib login ---------- */
@@ -35,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('can:melihat riwayat adopsi sendiri')->group(function () {
         Route::get('/adopsi-saya', [AdopsiController::class, 'index'])->name('adopsi.index');
         Route::delete('/adopsi-saya/{adopsi}', [AdopsiController::class, 'destroy'])->name('adopsi.destroy');
+        Route::get('/laporan-saya', [ReportController::class, 'customer'])->name('laporan.customer');
     });
 
     // Admin
@@ -48,10 +53,18 @@ Route::middleware('auth')->group(function () {
                 ->except(['create', 'show'])->parameters(['kategori' => 'kategori']);
         });
 
+        Route::middleware('can:kelola syarat dan ketentuan')->group(function () {
+            Route::get('syarat-ketentuan', [AdminSyaratKetentuanController::class, 'edit'])
+                ->name('syarat-ketentuan.edit');
+            Route::put('syarat-ketentuan', [AdminSyaratKetentuanController::class, 'update'])
+                ->name('syarat-ketentuan.update');
+        });
+
         Route::middleware('can:kelola pengajuan adopsi')->group(function () {
             Route::get('adopsi', [AdminAdopsiController::class, 'index'])->name('adopsi.index');
             Route::post('adopsi/{adopsi}/setujui', [AdminAdopsiController::class, 'setujui'])->name('adopsi.setujui');
             Route::post('adopsi/{adopsi}/tolak', [AdminAdopsiController::class, 'tolak'])->name('adopsi.tolak');
+            Route::get('laporan', [ReportController::class, 'admin'])->name('laporan.index');
         });
 
         Route::middleware('can:kelola pengguna')->group(function () {

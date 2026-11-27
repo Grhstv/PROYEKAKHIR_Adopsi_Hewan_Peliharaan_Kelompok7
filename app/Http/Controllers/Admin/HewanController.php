@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HewanRequest;
 use App\Models\Hewan;
+use App\Models\HewanMutation;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -21,7 +22,7 @@ class HewanController extends Controller
             ->withQueryString();
 
         return view('admin.hewan.index', [
-            'hewans'    => $hewans,
+            'hewans' => $hewans,
             'kategoris' => Kategori::orderBy('nama')->get(),
         ]);
     }
@@ -29,7 +30,7 @@ class HewanController extends Controller
     public function create()
     {
         return view('admin.hewan.create', [
-            'hewan'     => new Hewan(['status' => Hewan::TERSEDIA, 'jenis_kelamin' => 'jantan']),
+            'hewan' => new Hewan(['status' => Hewan::TERSEDIA, 'jenis_kelamin' => 'jantan']),
             'kategoris' => Kategori::orderBy('nama')->get(),
         ]);
     }
@@ -43,7 +44,14 @@ class HewanController extends Controller
             $data['foto'] = $request->file('foto')->store('hewan', 'public');
         }
 
-        Hewan::create($data);
+        $hewan = Hewan::create($data);
+        HewanMutation::create([
+            'hewan_id' => $hewan->id,
+            'nama_hewan' => $hewan->nama,
+            'jenis' => HewanMutation::DITAMBAHKAN,
+            'user_id' => $request->user()->id,
+            'keterangan' => 'Hewan ditambahkan ke daftar shelter.',
+        ]);
 
         return redirect()->route('admin.hewan.index')->with('success', 'Data hewan ditambahkan.');
     }
@@ -51,7 +59,7 @@ class HewanController extends Controller
     public function edit(Hewan $hewan)
     {
         return view('admin.hewan.edit', [
-            'hewan'     => $hewan,
+            'hewan' => $hewan,
             'kategoris' => Kategori::orderBy('nama')->get(),
         ]);
     }
@@ -81,6 +89,13 @@ class HewanController extends Controller
         if ($hewan->foto) {
             Storage::disk('public')->delete($hewan->foto);
         }
+        HewanMutation::create([
+            'hewan_id' => null,
+            'nama_hewan' => $hewan->nama,
+            'jenis' => HewanMutation::DIHAPUS,
+            'user_id' => request()->user()->id,
+            'keterangan' => 'Data hewan dihapus dari daftar shelter.',
+        ]);
         $hewan->delete();
 
         return redirect()->route('admin.hewan.index')->with('success', 'Data hewan dihapus.');

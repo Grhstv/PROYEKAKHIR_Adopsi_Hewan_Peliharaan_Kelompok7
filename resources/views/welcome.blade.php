@@ -32,7 +32,8 @@
                     </form>
 
                     <a href="{{ route('hewan.index') }}" class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#52735c] transition hover:text-[#d77d55]">
-                        Lihat semua hewan <span aria-hidden="true">↗</span>
+                        Lihat semua hewan
+                        <svg class="h-4 w-4 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </a>
                 </div>
 
@@ -49,7 +50,9 @@
                             <p class="mt-1 font-serif text-2xl font-semibold text-[#283c30]">Dimulai dari sini.</p>
                         </div>
                     </div>
-                    <div class="absolute -right-3 top-8 grid h-16 w-16 place-items-center rounded-2xl bg-[#e59870] text-3xl shadow-lg sm:-right-5 sm:top-12" aria-hidden="true">🐾</div>
+                    <div class="absolute -right-3 top-8 grid h-16 w-16 place-items-center rounded-2xl bg-[#e59870] text-white shadow-lg sm:-right-5 sm:top-12">
+                        <x-paw-mark class="h-8 w-8" />
+                    </div>
                 </div>
             </div>
         </section>
@@ -57,15 +60,19 @@
         <section class="mx-auto -mt-2 max-w-7xl px-5 sm:px-8 lg:px-10" aria-label="Ringkasan adopsi">
             <div class="grid overflow-hidden rounded-2xl border border-[#e6e8df] bg-white shadow-sm sm:grid-cols-3">
                 <div class="flex items-center gap-4 border-b border-[#eceee7] px-6 py-5 sm:border-b-0 sm:border-r sm:px-8">
-                    <span class="grid h-12 w-12 place-items-center rounded-xl bg-[#edf3e9] text-xl" aria-hidden="true">🐕</span>
+                    <span class="grid h-12 w-12 place-items-center rounded-xl bg-[#edf3e9] text-[#52735c]"><x-paw-mark class="h-6 w-6" /></span>
                     <div><p class="text-2xl font-bold text-[#2d4d39]">{{ number_format($totalTersedia) }}</p><p class="text-sm text-[#788176]">teman menanti</p></div>
                 </div>
                 <div class="flex items-center gap-4 border-b border-[#eceee7] px-6 py-5 sm:border-b-0 sm:border-r sm:px-8">
-                    <span class="grid h-12 w-12 place-items-center rounded-xl bg-[#fbf0e9] text-xl" aria-hidden="true">🏡</span>
+                    <span class="grid h-12 w-12 place-items-center rounded-xl bg-[#fbf0e9] text-[#bc7856]">
+                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m3.5 10 8.5-7 8.5 7v10.5h-6v-6h-5v6h-6V10Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M2.5 10.5 12 3l9.5 7.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
                     <div><p class="text-2xl font-bold text-[#2d4d39]">{{ number_format($totalTeradopsi) }}</p><p class="text-sm text-[#788176]">sudah punya rumah</p></div>
                 </div>
                 <div class="flex items-center gap-4 px-6 py-5 sm:px-8">
-                    <span class="grid h-12 w-12 place-items-center rounded-xl bg-[#f7f1df] text-xl" aria-hidden="true">💛</span>
+                    <span class="grid h-12 w-12 place-items-center rounded-xl bg-[#f7f1df] text-[#ad8b46]">
+                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.8 8.7c0 5.4-8.8 11-8.8 11s-8.8-5.6-8.8-11A4.7 4.7 0 0 1 12 6.1a4.7 4.7 0 0 1 8.8 2.6Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+                    </span>
                     <div><p class="text-2xl font-bold text-[#2d4d39]">{{ $kategoris->count() }}</p><p class="text-sm text-[#788176]">kategori sahabat</p></div>
                 </div>
             </div>
@@ -77,17 +84,29 @@
                     <p class="text-xs font-bold uppercase tracking-[.18em] text-[#d77d55]">Pilih temanmu</p>
                     <h2 class="mt-2 font-serif text-3xl font-semibold text-[#263a2f] sm:text-4xl">Cari berdasarkan kategori</h2>
                 </div>
-                <a href="{{ route('hewan.index') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-[#52735c] hover:text-[#d77d55]">
+                <a href="{{ route('hewan.index') }}" class="group inline-flex items-center gap-2 text-sm font-semibold text-[#52735c] hover:text-[#d77d55]">
                     Jelajahi semua <span aria-hidden="true">→</span>
                 </a>
             </div>
             <div class="mt-7 flex gap-3 overflow-x-auto pb-2">
                 @php
-                    $ikonKategori = ['kucing' => '🐈', 'anjing' => '🐕', 'kelinci' => '🐇', 'burung' => '🦜', 'hamster' => '🐹'];
+                    $fotoKategori = [
+                        'kucing' => 'https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=120&q=75',
+                        'anjing' => 'https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=120&q=75',
+                        'kelinci' => 'https://images.pexels.com/photos/4588065/pexels-photo-4588065.jpeg',
+                        'burung' => 'https://images.unsplash.com/photo-1444464666168-49d633b86797?auto=format&fit=crop&w=120&q=75',
+                        'hamster' => 'https://images.unsplash.com/photo-1425082661705-1834bfd09dca?auto=format&fit=crop&w=120&q=75',
+                    ];
                 @endphp
                 @forelse ($kategoris as $kategori)
                     <a href="{{ route('hewan.index', ['kategori' => $kategori->id]) }}" class="group flex min-w-max items-center gap-3 rounded-2xl border border-[#e6e8df] bg-white px-5 py-4 transition hover:-translate-y-0.5 hover:border-[#b6c9b5] hover:shadow-md">
-                        <span class="grid h-11 w-11 place-items-center rounded-xl bg-[#f1f4ec] text-2xl transition group-hover:bg-[#e7efe4]" aria-hidden="true">{{ $ikonKategori[$kategori->slug] ?? '🐾' }}</span>
+                        <span class="grid h-11 w-11 place-items-center overflow-hidden rounded-xl bg-[#f1f4ec] text-[#52735c] transition group-hover:bg-[#e7efe4]">
+                            @if (isset($fotoKategori[$kategori->slug]))
+                                <img src="{{ $fotoKategori[$kategori->slug] }}" alt="" class="h-full w-full object-cover" loading="lazy">
+                            @else
+                                <x-paw-mark class="h-6 w-6" />
+                            @endif
+                        </span>
                         <span><span class="block font-semibold text-[#314638]">{{ $kategori->nama }}</span><span class="mt-0.5 block text-xs text-[#8b9388]">{{ $kategori->hewans_count }} tersedia</span></span>
                         <span class="ml-1 text-[#a2aa9f] transition group-hover:translate-x-1 group-hover:text-[#52735c]" aria-hidden="true">→</span>
                     </a>
@@ -113,7 +132,7 @@
                     @include('hewan._card', ['hewan' => $hewan])
                 @empty
                     <div class="col-span-full rounded-2xl border border-dashed border-[#d8dfd4] bg-white px-6 py-14 text-center">
-                        <span class="text-4xl" aria-hidden="true">🐾</span>
+                        <x-paw-mark class="mx-auto h-10 w-10 text-[#8ba18a]" />
                         <h3 class="mt-3 font-serif text-2xl font-semibold text-[#314638]">Belum ada teman yang terdaftar</h3>
                         <p class="mt-2 text-sm text-[#788176]">Coba kunjungi lagi nanti, mungkin ada cerita baru yang menunggu.</p>
                     </div>
@@ -134,17 +153,23 @@
                     </div>
                     <div class="grid gap-3 sm:grid-cols-3">
                         <div class="rounded-2xl border border-white/10 bg-white/[.07] p-5">
-                            <span class="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-xl" aria-hidden="true">🔎</span>
+                            <span class="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-[#d8e1d5]">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                            </span>
                             <h3 class="mt-4 font-semibold">Kenali ceritanya</h3>
                             <p class="mt-2 text-sm leading-5 text-[#d1ddd0]">Baca profil, kesehatan, dan kebiasaan setiap hewan.</p>
                         </div>
                         <div class="rounded-2xl border border-white/10 bg-white/[.07] p-5">
-                            <span class="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-xl" aria-hidden="true">📝</span>
+                            <span class="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-[#d8e1d5]">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 3v6h6M8 13h8M8 17h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                            </span>
                             <h3 class="mt-4 font-semibold">Ajukan adopsi</h3>
                             <p class="mt-2 text-sm leading-5 text-[#d1ddd0]">Ceritakan rumah dan kesiapanmu merawat mereka.</p>
                         </div>
                         <div class="rounded-2xl border border-white/10 bg-white/[.07] p-5">
-                            <span class="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-xl" aria-hidden="true">🏠</span>
+                            <span class="grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-[#d8e1d5]">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1V10Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+                            </span>
                             <h3 class="mt-4 font-semibold">Mulai perjalanan</h3>
                             <p class="mt-2 text-sm leading-5 text-[#d1ddd0]">Pantau status pengajuanmu dari akun PetHaven.</p>
                         </div>

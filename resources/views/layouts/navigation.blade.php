@@ -2,7 +2,7 @@
     <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
         <div class="flex h-[4.5rem] items-center justify-between">
             <a href="{{ route('home') }}" class="flex shrink-0 items-center gap-2.5" aria-label="PetHaven, beranda">
-                <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#365b45] text-xl text-white">🐾</span>
+                <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#365b45] text-white"><x-paw-mark class="h-6 w-6" /></span>
                 <span class="font-serif text-2xl font-semibold tracking-tight text-[#2d4937]">{{ config('app.name', 'PetHaven') }}</span>
             </a>
 
@@ -21,11 +21,19 @@
                     @endcan
                     @can('kelola pengajuan adopsi')
                         <a href="{{ route('admin.adopsi.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Pengajuan</a>
+                        <a href="{{ route('admin.laporan.index') }}" class="text-sm font-semibold {{ request()->routeIs('admin.laporan.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Laporan</a>
                     @endcan
                     @can('kelola pengguna')
                         <a href="{{ route('admin.pengguna.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Pengguna</a>
                     @endcan
+                    @can('melihat riwayat adopsi sendiri')
+                        <a href="{{ route('laporan.customer') }}" class="text-sm font-semibold {{ request()->routeIs('laporan.customer') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Laporan saya</a>
+                    @endcan
+                    <a href="{{ route('syarat-ketentuan.show') }}" class="text-sm font-semibold {{ request()->routeIs('syarat-ketentuan.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Syarat &amp; Ketentuan</a>
                 @endauth
+                @guest
+                    <a href="{{ route('syarat-ketentuan.show') }}" class="text-sm font-semibold {{ request()->routeIs('syarat-ketentuan.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Syarat &amp; Ketentuan</a>
+                @endguest
             </div>
 
             <div class="hidden items-center gap-3 md:flex">
@@ -77,10 +85,15 @@
                 @endcan
                 @can('kelola pengajuan adopsi')
                     <a href="{{ route('admin.adopsi.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pengajuan</a>
+                    <a href="{{ route('admin.laporan.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Laporan</a>
                 @endcan
                 @can('kelola pengguna')
                     <a href="{{ route('admin.pengguna.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pengguna</a>
                 @endcan
+                @can('melihat riwayat adopsi sendiri')
+                    <a href="{{ route('laporan.customer') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Laporan saya</a>
+                @endcan
+                <a href="{{ route('syarat-ketentuan.show') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Syarat &amp; Ketentuan</a>
                 <div class="mt-3 border-t border-[#e7e9e1] pt-3">
                     <p class="px-3 text-sm font-semibold text-[#33483a]">{{ Auth::user()->name }}</p>
                     <a href="{{ route('dashboard') }}" class="block rounded-lg px-3 py-2.5 text-sm text-[#68766b] hover:bg-[#f0f3ed]">Dashboard</a>
@@ -91,6 +104,7 @@
                     </form>
                 </div>
             @else
+                <a href="{{ route('syarat-ketentuan.show') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Syarat &amp; Ketentuan</a>
                 <div class="mt-3 grid grid-cols-2 gap-3 border-t border-[#e7e9e1] pt-4">
                     <a href="{{ route('login') }}" class="rounded-xl border border-[#dfe5dc] px-4 py-2.5 text-center text-sm font-semibold text-[#365b45]">Masuk</a>
                     <a href="{{ route('register') }}" class="rounded-xl bg-[#365b45] px-4 py-2.5 text-center text-sm font-semibold text-white">Daftar</a>

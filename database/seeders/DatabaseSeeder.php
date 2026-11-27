@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             KategoriSeeder::class,
             HewanSeeder::class,
+            HewanTambahanSeeder::class,
             UserSeeder::class,
         ]);
     }

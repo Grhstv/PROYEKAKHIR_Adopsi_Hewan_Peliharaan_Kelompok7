@@ -10,7 +10,7 @@ class KategoriSeeder extends Seeder
 {
     public function run(): void
     {
-        foreach (['Kucing', 'Anjing', 'Kelinci', 'Burung', 'Hamster'] as $nama) {
+        foreach (['Kucing', 'Anjing', 'Kelinci', 'Burung', 'Hamster', 'Ikan'] as $nama) {
             Kategori::firstOrCreate(['slug' => Str::slug($nama)], ['nama' => $nama]);
         }
     }

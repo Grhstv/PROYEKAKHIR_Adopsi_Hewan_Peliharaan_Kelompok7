@@ -9,11 +9,10 @@
                 @if ($hewan->foto_asli)
                     <img src="{{ $hewan->foto_asli }}" alt="Foto {{ $hewan->nama }}" class="absolute inset-0 h-full w-full object-cover">
                 @else
-                    @php
-                        $ikonHewan = ['kucing' => '🐈', 'anjing' => '🐕', 'kelinci' => '🐇', 'burung' => '🦜', 'hamster' => '🐹'];
-                    @endphp
                     <div class="absolute inset-0 grid place-items-center">
-                        <span class="grid h-36 w-36 place-items-center rounded-full bg-white/70 text-7xl shadow-sm" aria-hidden="true">{{ $ikonHewan[$hewan->kategori->slug] ?? '🐾' }}</span>
+                        <span class="grid h-36 w-36 place-items-center rounded-full bg-white/70 text-[#52735c] shadow-sm">
+                            <x-paw-mark class="h-20 w-20" />
+                        </span>
                     </div>
                 @endif
                 <span class="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold {{ $hewan->status === \App\Models\Hewan::TERSEDIA ? 'text-[#42654a]' : 'text-[#777f77]' }}">
@@ -46,7 +45,7 @@
 
                 <div class="mt-6">
                     @if ($hewan->status !== \App\Models\Hewan::TERSEDIA)
-                        <p class="rounded-xl bg-[#f3f5ef] p-4 text-sm leading-6 text-[#68766b]">Kabar baik, {{ $hewan->nama }} sudah menemukan rumah baru. Terima kasih sudah ikut peduli! 💛</p>
+                        <p class="rounded-xl bg-[#f3f5ef] p-4 text-sm leading-6 text-[#68766b]">Kabar baik, {{ $hewan->nama }} sudah menemukan rumah baru. Terima kasih sudah ikut peduli.</p>
                     @elseif (! auth()->check())
                         <a href="{{ route('login') }}" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#365b45] px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-[#294936] focus:outline-none focus:ring-2 focus:ring-[#365b45] focus:ring-offset-2 sm:w-auto">
                             Masuk untuk mengajukan adopsi <span aria-hidden="true">→</span>
