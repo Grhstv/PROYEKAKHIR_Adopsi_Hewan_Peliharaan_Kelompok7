@@ -27,7 +27,7 @@
                         <a href="{{ route('admin.pengguna.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Pengguna</a>
                     @endcan
                     @can('melihat riwayat adopsi sendiri')
-                        <a href="{{ route('laporan.customer') }}" class="text-sm font-semibold {{ request()->routeIs('laporan.customer') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Laporan saya</a>
+                        <a href="{{ route('adopsi.index') }}" class="text-sm font-semibold {{ request()->routeIs('adopsi.index') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Riwayat</a>
                     @endcan
                     <a href="{{ route('syarat-ketentuan.show') }}" class="text-sm font-semibold {{ request()->routeIs('syarat-ketentuan.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Syarat &amp; Ketentuan</a>
                 @endauth
@@ -91,7 +91,7 @@
                     <a href="{{ route('admin.pengguna.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pengguna</a>
                 @endcan
                 @can('melihat riwayat adopsi sendiri')
-                    <a href="{{ route('laporan.customer') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Laporan saya</a>
+                    <a href="{{ route('adopsi.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Riwayat</a>
                 @endcan
                 <a href="{{ route('syarat-ketentuan.show') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Syarat &amp; Ketentuan</a>
                 <div class="mt-3 border-t border-[#e7e9e1] pt-3">

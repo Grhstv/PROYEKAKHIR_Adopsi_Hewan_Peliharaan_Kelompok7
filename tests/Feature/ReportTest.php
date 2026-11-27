@@ -52,9 +52,8 @@ class ReportTest extends TestCase
         ]);
     }
 
-    public function test_guest_is_redirected_from_report_pages(): void
+    public function test_guest_is_redirected_from_admin_report(): void
     {
-        $this->get(route('laporan.customer'))->assertRedirect(route('login'));
         $this->get(route('admin.laporan.index'))->assertRedirect(route('login'));
     }
 
@@ -104,7 +103,7 @@ class ReportTest extends TestCase
             ->assertSee('Milo');
     }
 
-    public function test_adopter_report_only_contains_their_adoptions(): void
+    public function test_adopter_history_shows_only_own_records_without_a_report_link(): void
     {
         $owner = $this->user('adopter');
         $other = $this->user('adopter');
@@ -112,10 +111,19 @@ class ReportTest extends TestCase
         $this->adoption($other, 'Poppy Orang Lain');
 
         $this->actingAs($owner)
-            ->get(route('laporan.customer'))
+            ->get(route('adopsi.index'))
             ->assertOk()
-            ->assertSee('Laporan Adopsi Saya')
+            ->assertSee('Riwayat Adopsi Saya')
+            ->assertSee('Riwayat')
             ->assertSee('Mochi Sendiri')
-            ->assertDontSee('Poppy Orang Lain');
+            ->assertDontSee('Poppy Orang Lain')
+            ->assertDontSee('Laporan saya');
+    }
+
+    public function test_customer_report_route_is_not_available(): void
+    {
+        $this->actingAs($this->user('adopter'))
+            ->get('/laporan-saya')
+            ->assertStatus(404);
     }
 }

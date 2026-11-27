@@ -39,7 +39,6 @@ Route::middleware('auth')->group(function () {
     Route::middleware('can:melihat riwayat adopsi sendiri')->group(function () {
         Route::get('/adopsi-saya', [AdopsiController::class, 'index'])->name('adopsi.index');
         Route::delete('/adopsi-saya/{adopsi}', [AdopsiController::class, 'destroy'])->name('adopsi.destroy');
-        Route::get('/laporan-saya', [ReportController::class, 'customer'])->name('laporan.customer');
     });
 
     // Admin
