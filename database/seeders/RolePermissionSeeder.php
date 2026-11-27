@@ -18,6 +18,7 @@ class RolePermissionSeeder extends Seeder
             'kelola hewan',
             'kelola kategori',
             'kelola pengajuan adopsi',
+            'kelola pesan pelanggan',
             'kelola pengguna',
             'kelola syarat dan ketentuan',
             'mengajukan adopsi',
@@ -30,7 +31,8 @@ class RolePermissionSeeder extends Seeder
         $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $admin->syncPermissions([
             'lihat dashboard admin', 'kelola hewan', 'kelola kategori',
-            'kelola pengajuan adopsi', 'kelola pengguna', 'kelola syarat dan ketentuan',
+            'kelola pengajuan adopsi', 'kelola pesan pelanggan', 'kelola pengguna',
+            'kelola syarat dan ketentuan',
         ]);
 
         // Petugas: staf shelter yang mengelola hewan dan memproses pengajuan, tanpa kategori/pengguna.

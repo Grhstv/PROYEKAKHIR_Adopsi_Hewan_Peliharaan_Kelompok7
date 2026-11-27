@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdopsiController as AdminAdopsiController;
 use App\Http\Controllers\Admin\HewanController as AdminHewanController;
 use App\Http\Controllers\Admin\KategoriController as AdminKategoriController;
+use App\Http\Controllers\Admin\SupportChatController as AdminSupportChatController;
 use App\Http\Controllers\Admin\SyaratKetentuanController as AdminSyaratKetentuanController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\AdopsiController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\HewanController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SupportChatController;
 use App\Http\Controllers\SyaratKetentuanController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +41,9 @@ Route::middleware('auth')->group(function () {
     Route::middleware('can:melihat riwayat adopsi sendiri')->group(function () {
         Route::get('/adopsi-saya', [AdopsiController::class, 'index'])->name('adopsi.index');
         Route::delete('/adopsi-saya/{adopsi}', [AdopsiController::class, 'destroy'])->name('adopsi.destroy');
+        Route::get('/chat-admin', [SupportChatController::class, 'show'])->name('chat.index');
+        Route::post('/chat-admin', [SupportChatController::class, 'store'])
+            ->middleware('throttle:10,1')->name('chat.store');
     });
 
     // Admin
@@ -64,6 +69,13 @@ Route::middleware('auth')->group(function () {
             Route::post('adopsi/{adopsi}/setujui', [AdminAdopsiController::class, 'setujui'])->name('adopsi.setujui');
             Route::post('adopsi/{adopsi}/tolak', [AdminAdopsiController::class, 'tolak'])->name('adopsi.tolak');
             Route::get('laporan', [ReportController::class, 'admin'])->name('laporan.index');
+        });
+
+        Route::middleware('can:kelola pesan pelanggan')->group(function () {
+            Route::get('pesan', [AdminSupportChatController::class, 'index'])->name('chat.index');
+            Route::get('pesan/{conversation}', [AdminSupportChatController::class, 'show'])->name('chat.show');
+            Route::post('pesan/{conversation}', [AdminSupportChatController::class, 'store'])
+                ->middleware('throttle:30,1')->name('chat.store');
         });
 
         Route::middleware('can:kelola pengguna')->group(function () {
