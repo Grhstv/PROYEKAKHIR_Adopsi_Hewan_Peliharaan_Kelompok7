@@ -20,11 +20,15 @@
                         <a href="{{ route('admin.adopsi.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Pengajuan</a>
                         <a href="{{ route('admin.laporan.index') }}" class="text-sm font-semibold {{ request()->routeIs('admin.laporan.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Laporan</a>
                     @endcan
+                    @can('kelola pesan pelanggan')
+                        <a href="{{ route('admin.chat.index') }}" class="text-sm font-semibold {{ request()->routeIs('admin.chat.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Pesan Pelanggan</a>
+                    @endcan
                     @can('kelola pengguna')
                         <a href="{{ route('admin.pengguna.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Pengguna</a>
                     @endcan
                     @can('melihat riwayat adopsi sendiri')
                         <a href="{{ route('adopsi.index') }}" class="text-sm font-semibold {{ request()->routeIs('adopsi.index') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Riwayat</a>
+                        <a href="{{ route('chat.index') }}" class="text-sm font-semibold {{ request()->routeIs('chat.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Chat Admin</a>
                     @endcan
                     <a href="{{ route('syarat-ketentuan.show') }}" class="text-sm font-semibold {{ request()->routeIs('syarat-ketentuan.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Syarat &amp; Ketentuan</a>
                 @endauth
@@ -81,11 +85,15 @@
                     <a href="{{ route('admin.adopsi.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pengajuan</a>
                     <a href="{{ route('admin.laporan.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Laporan</a>
                 @endcan
+                @can('kelola pesan pelanggan')
+                    <a href="{{ route('admin.chat.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pesan Pelanggan</a>
+                @endcan
                 @can('kelola pengguna')
                     <a href="{{ route('admin.pengguna.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pengguna</a>
                 @endcan
                 @can('melihat riwayat adopsi sendiri')
                     <a href="{{ route('adopsi.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Riwayat</a>
+                    <a href="{{ route('chat.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Chat Admin</a>
                 @endcan
                 <a href="{{ route('syarat-ketentuan.show') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Syarat &amp; Ketentuan</a>
                 <div class="mt-3 border-t border-[#e7e9e1] pt-3">
