@@ -5,15 +5,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Adopsi Hewan') }}</title>
+        <meta name="theme-color" content="#f7f6f1">
+        <meta name="description" content="Temukan teman baru dan beri mereka rumah yang penuh kasih bersama PetHaven.">
+        <title>{{ config('app.name', 'PetHaven') }}</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700|dm-serif-display:400&display=swap" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+    <body class="font-sans antialiased text-[#263a2f]">
+        <div class="min-h-screen bg-[#f7f6f1]">
             @include('layouts.navigation')
 
             @isset($header)
@@ -29,8 +31,11 @@
                 {{ $slot }}
             </main>
 
-            <footer class="mt-12 border-t bg-white py-6 text-center text-sm text-gray-500">
-                &copy; {{ date('Y') }} {{ config('app.name', 'Adopsi Hewan') }} &middot; Beri mereka rumah baru.
+            <footer class="border-t border-[#e5e8df] bg-white">
+                <div class="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-7 text-sm text-[#788176] sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
+                    <a href="{{ route('home') }}" class="font-semibold text-[#365b45]">🐾 {{ config('app.name', 'PetHaven') }}</a>
+                    <p>&copy; {{ date('Y') }} PetHaven. Setiap sahabat layak mendapat rumah yang penuh kasih.</p>
+                </div>
             </footer>
         </div>
     </body>

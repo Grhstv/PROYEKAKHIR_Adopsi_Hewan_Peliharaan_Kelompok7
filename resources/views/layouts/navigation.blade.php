@@ -1,120 +1,99 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" class="text-lg font-bold text-indigo-600">🐾 {{ config('app.name', 'Adopsi Hewan') }}</a>
-                </div>
+<nav x-data="{ open: false }" class="sticky top-0 z-40 border-b border-[#e7e9e1] bg-[#fbfaf7]/95 backdrop-blur">
+    <div class="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+        <div class="flex h-[4.5rem] items-center justify-between">
+            <a href="{{ route('home') }}" class="flex shrink-0 items-center gap-2.5" aria-label="PetHaven, beranda">
+                <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#365b45] text-xl text-white">🐾</span>
+                <span class="font-serif text-2xl font-semibold tracking-tight text-[#2d4937]">{{ config('app.name', 'PetHaven') }}</span>
+            </a>
 
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')">Beranda</x-nav-link>
-                    <x-nav-link :href="route('hewan.index')" :active="request()->routeIs('hewan.*')">Daftar Hewan</x-nav-link>
-                    <x-nav-link :href="route('katalog.live')" :active="request()->routeIs('katalog.live')">Katalog Live</x-nav-link>
-
-                    @auth
-                        @can('mengajukan adopsi')
-                            <x-nav-link :href="route('adopsi.index')" :active="request()->routeIs('adopsi.*')">Adopsi Saya</x-nav-link>
-                        @endcan
-                        @can('kelola hewan')
-                            <x-nav-link :href="route('admin.hewan.index')" :active="request()->routeIs('admin.hewan.*')">Kelola Hewan</x-nav-link>
-                        @endcan
-                        @can('kelola kategori')
-                            <x-nav-link :href="route('admin.kategori.index')" :active="request()->routeIs('admin.kategori.*')">Kategori</x-nav-link>
-                        @endcan
-                        @can('kelola pengajuan adopsi')
-                            <x-nav-link :href="route('admin.adopsi.index')" :active="request()->routeIs('admin.adopsi.*')">Pengajuan</x-nav-link>
-                        @endcan
-                        @can('kelola pengguna')
-                            <x-nav-link :href="route('admin.pengguna.index')" :active="request()->routeIs('admin.pengguna.*')">Pengguna</x-nav-link>
-                        @endcan
-                    @endauth
-                </div>
+            <div class="hidden items-center gap-8 md:flex">
+                <a href="{{ route('home') }}" class="text-sm font-semibold {{ request()->routeIs('home') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Beranda</a>
+                <a href="{{ route('hewan.index') }}" class="text-sm font-semibold {{ request()->routeIs('hewan.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Cari sahabat</a>
+                @auth
+                    @can('mengajukan adopsi')
+                        <a href="{{ route('adopsi.index') }}" class="text-sm font-semibold {{ request()->routeIs('adopsi.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Adopsi saya</a>
+                    @endcan
+                    @can('kelola hewan')
+                        <a href="{{ route('admin.hewan.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Kelola hewan</a>
+                    @endcan
+                    @can('kelola kategori')
+                        <a href="{{ route('admin.kategori.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Kategori</a>
+                    @endcan
+                    @can('kelola pengajuan adopsi')
+                        <a href="{{ route('admin.adopsi.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Pengajuan</a>
+                    @endcan
+                    @can('kelola pengguna')
+                        <a href="{{ route('admin.pengguna.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Pengguna</a>
+                    @endcan
+                @endauth
             </div>
 
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden items-center gap-3 md:flex">
                 @auth
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                <div>{{ Auth::user()->name }}</div>
-                                <div class="ms-1">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
+                            <button class="inline-flex items-center gap-2 rounded-xl border border-[#e3e7df] bg-white px-4 py-2.5 text-sm font-semibold text-[#405447] transition hover:border-[#b8c9b6] focus:outline-none focus:ring-2 focus:ring-[#52735c]">
+                                <span class="grid h-6 w-6 place-items-center rounded-full bg-[#edf3e9] text-xs text-[#365b45]">{{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 1)) }}</span>
+                                <span class="max-w-28 truncate">{{ Auth::user()->name }}</span>
+                                <svg class="h-4 w-4 text-[#899389]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 7.47a.75.75 0 0 1 1.06 0L10 11.19l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 8.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/></svg>
                             </button>
                         </x-slot>
-
                         <x-slot name="content">
                             <x-dropdown-link :href="route('dashboard')">Dashboard</x-dropdown-link>
                             <x-dropdown-link :href="route('profile.edit')">Profil</x-dropdown-link>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
-                                    Keluar
-                                </x-dropdown-link>
+                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">Keluar</x-dropdown-link>
                             </form>
                         </x-slot>
                     </x-dropdown>
                 @else
-                    <a href="{{ route('login') }}" class="text-sm text-gray-600 hover:text-gray-900">Masuk</a>
-                    <a href="{{ route('register') }}" class="ms-4 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Daftar</a>
+                    <a href="{{ route('login') }}" class="rounded-xl px-4 py-2.5 text-sm font-semibold text-[#607065] transition hover:text-[#2f4d3a]">Masuk</a>
+                    <a href="{{ route('register') }}" class="rounded-xl bg-[#365b45] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#294936] focus:outline-none focus:ring-2 focus:ring-[#365b45] focus:ring-offset-2">Mulai adopsi</a>
                 @endauth
             </div>
 
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+            <button type="button" @click="open = !open" :aria-expanded="open.toString()" aria-controls="mobile-menu" class="grid h-10 w-10 place-items-center rounded-xl border border-[#e3e7df] text-[#365b45] md:hidden">
+                <span class="sr-only">Buka menu</span>
+                <svg x-show="!open" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 7h16M4 12h16M4 17h16"/></svg>
+                <svg x-show="open" x-cloak class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="m6 6 12 12M18 6 6 18"/></svg>
+            </button>
         </div>
     </div>
 
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')">Beranda</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('hewan.index')" :active="request()->routeIs('hewan.*')">Daftar Hewan</x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('katalog.live')" :active="request()->routeIs('katalog.live')">Katalog Live</x-responsive-nav-link>
+    <div id="mobile-menu" x-show="open" x-cloak x-transition class="border-t border-[#e7e9e1] bg-[#fbfaf7] px-5 pb-5 pt-3 md:hidden">
+        <div class="space-y-1">
+            <a href="{{ route('home') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#365b45]">Beranda</a>
+            <a href="{{ route('hewan.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Cari sahabat</a>
             @auth
                 @can('mengajukan adopsi')
-                    <x-responsive-nav-link :href="route('adopsi.index')" :active="request()->routeIs('adopsi.*')">Adopsi Saya</x-responsive-nav-link>
+                    <a href="{{ route('adopsi.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Adopsi saya</a>
                 @endcan
                 @can('kelola hewan')
-                    <x-responsive-nav-link :href="route('admin.hewan.index')">Kelola Hewan</x-responsive-nav-link>
+                    <a href="{{ route('admin.hewan.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Kelola hewan</a>
                 @endcan
                 @can('kelola kategori')
-                    <x-responsive-nav-link :href="route('admin.kategori.index')">Kategori</x-responsive-nav-link>
+                    <a href="{{ route('admin.kategori.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Kategori</a>
                 @endcan
                 @can('kelola pengajuan adopsi')
-                    <x-responsive-nav-link :href="route('admin.adopsi.index')">Pengajuan</x-responsive-nav-link>
+                    <a href="{{ route('admin.adopsi.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pengajuan</a>
                 @endcan
                 @can('kelola pengguna')
-                    <x-responsive-nav-link :href="route('admin.pengguna.index')">Pengguna</x-responsive-nav-link>
+                    <a href="{{ route('admin.pengguna.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pengguna</a>
                 @endcan
-            @endauth
-        </div>
-
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            @auth
-                <div class="px-4">
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-                </div>
-                <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('dashboard')">Dashboard</x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('profile.edit')">Profil</x-responsive-nav-link>
+                <div class="mt-3 border-t border-[#e7e9e1] pt-3">
+                    <p class="px-3 text-sm font-semibold text-[#33483a]">{{ Auth::user()->name }}</p>
+                    <a href="{{ route('dashboard') }}" class="block rounded-lg px-3 py-2.5 text-sm text-[#68766b] hover:bg-[#f0f3ed]">Dashboard</a>
+                    <a href="{{ route('profile.edit') }}" class="block rounded-lg px-3 py-2.5 text-sm text-[#68766b] hover:bg-[#f0f3ed]">Profil</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">Keluar</x-responsive-nav-link>
+                        <button type="submit" class="w-full rounded-lg px-3 py-2.5 text-left text-sm text-[#68766b] hover:bg-[#f0f3ed]">Keluar</button>
                     </form>
                 </div>
             @else
-                <div class="space-y-1">
-                    <x-responsive-nav-link :href="route('login')">Masuk</x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('register')">Daftar</x-responsive-nav-link>
+                <div class="mt-3 grid grid-cols-2 gap-3 border-t border-[#e7e9e1] pt-4">
+                    <a href="{{ route('login') }}" class="rounded-xl border border-[#dfe5dc] px-4 py-2.5 text-center text-sm font-semibold text-[#365b45]">Masuk</a>
+                    <a href="{{ route('register') }}" class="rounded-xl bg-[#365b45] px-4 py-2.5 text-center text-sm font-semibold text-white">Daftar</a>
                 </div>
             @endauth
         </div>

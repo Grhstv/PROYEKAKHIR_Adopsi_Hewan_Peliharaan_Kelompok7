@@ -52,6 +52,26 @@ class AdopsiTest extends TestCase
         ];
     }
 
+    public function test_tamu_dapat_melihat_beranda_pethaven()
+    {
+        $this->hewan();
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertSee('Temukan teman baru')
+            ->assertSee('Mochi');
+    }
+
+    public function test_tamu_dapat_melihat_detail_hewan_dan_informasi_perawatannya()
+    {
+        $hewan = $this->hewan();
+
+        $this->get(route('hewan.show', $hewan))
+            ->assertOk()
+            ->assertSee('Tentang Mochi')
+            ->assertSee('Belum vaksin');
+    }
+
     public function test_01_tamu_bisa_melihat_daftar_hewan()
     {
         $this->hewan();
