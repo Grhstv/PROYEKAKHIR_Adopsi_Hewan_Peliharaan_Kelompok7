@@ -9,25 +9,10 @@
             <div class="hidden items-center gap-8 md:flex">
                 <a href="{{ route('home') }}" class="text-sm font-semibold {{ request()->routeIs('home') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Beranda</a>
                 <a href="{{ route('hewan.index') }}" class="text-sm font-semibold {{ request()->routeIs('hewan.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Cari sahabat</a>
+                <a href="{{ route('marketplace.index') }}" class="text-sm font-semibold {{ request()->routeIs('marketplace.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Marketplace</a>
                 @auth
                     @can('mengajukan adopsi')
                         <a href="{{ route('adopsi.index') }}" class="text-sm font-semibold {{ request()->routeIs('adopsi.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Adopsi saya</a>
-                    @endcan
-                    @can('kelola hewan')
-                        <a href="{{ route('admin.hewan.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Kelola hewan</a>
-                    @endcan
-                    @can('kelola kategori')
-                        <a href="{{ route('admin.kategori.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Kategori</a>
-                    @endcan
-                    @can('kelola pengajuan adopsi')
-                        <a href="{{ route('admin.adopsi.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Pengajuan</a>
-                        <a href="{{ route('admin.laporan.index') }}" class="text-sm font-semibold {{ request()->routeIs('admin.laporan.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Laporan</a>
-                    @endcan
-                    @can('kelola pengguna')
-                        <a href="{{ route('admin.pengguna.index') }}" class="text-sm font-semibold text-[#778176] hover:text-[#365b45]">Pengguna</a>
-                    @endcan
-                    @can('melihat riwayat adopsi sendiri')
-                        <a href="{{ route('laporan.customer') }}" class="text-sm font-semibold {{ request()->routeIs('laporan.customer') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Laporan saya</a>
                     @endcan
                     <a href="{{ route('syarat-ketentuan.show') }}" class="text-sm font-semibold {{ request()->routeIs('syarat-ketentuan.*') ? 'text-[#365b45]' : 'text-[#778176] hover:text-[#365b45]' }}">Syarat &amp; Ketentuan</a>
                 @endauth
@@ -49,6 +34,37 @@
                         <x-slot name="content">
                             <x-dropdown-link :href="route('dashboard')">Dashboard</x-dropdown-link>
                             <x-dropdown-link :href="route('profile.edit')">Profil</x-dropdown-link>
+                            @can('kelola hewan')
+                                <x-dropdown-link :href="route(Auth::user()->can('akses area admin') ? 'admin.hewan.index' : 'petugas.hewan.index')">Kelola hewan</x-dropdown-link>
+                            @endcan
+                            @can('kelola pengajuan adopsi')
+                                <x-dropdown-link :href="route(Auth::user()->can('akses area admin') ? 'admin.adopsi.index' : 'petugas.adopsi.index')">Pengajuan adopsi</x-dropdown-link>
+                            @endcan
+                            @can('akses area admin')
+                                <x-dropdown-link :href="route('admin.dashboard')">Area admin</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.kategori.index')">Kategori</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.pengguna.index')">Pengguna</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.seller-applications.index')">Pengajuan seller</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.chat.index')">Chat dan pengumuman</x-dropdown-link>
+                            @endcan
+                            @can('akses area petugas')
+                                <x-dropdown-link :href="route('petugas.dashboard')">Area petugas</x-dropdown-link>
+                            @endcan
+                            @can('lihat laporan')
+                                <x-dropdown-link :href="route('admin.laporan.index')">Laporan admin</x-dropdown-link>
+                            @endcan
+                            @can('lihat chat')
+                                <x-dropdown-link :href="route('chat.index')">Chat admin</x-dropdown-link>
+                            @endcan
+                            @can('belanja produk')
+                                <x-dropdown-link :href="route('cart.index')">Keranjang</x-dropdown-link>
+                                <x-dropdown-link :href="route('orders.index')">Pesanan saya</x-dropdown-link>
+                            @endcan
+                            @can('kelola toko')
+                                <x-dropdown-link :href="route('seller.dashboard')">Toko saya</x-dropdown-link>
+                            @elsecan('mengajukan menjadi seller')
+                                <x-dropdown-link :href="route('seller.application.create')">Pengajuan seller</x-dropdown-link>
+                            @endcan
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">Keluar</x-dropdown-link>
@@ -69,29 +85,49 @@
         </div>
     </div>
 
-    <div id="mobile-menu" x-show="open" x-cloak x-transition class="border-t border-[#e7e9e1] bg-[#fbfaf7] px-5 pb-5 pt-3 md:hidden">
+    <div id="mobile-menu" x-show="open" x-cloak x-transition class="max-h-[calc(100vh-4.5rem)] overflow-y-auto border-t border-[#e7e9e1] bg-[#fbfaf7] px-5 pb-5 pt-3 md:hidden">
         <div class="space-y-1">
             <a href="{{ route('home') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#365b45]">Beranda</a>
             <a href="{{ route('hewan.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Cari sahabat</a>
+            <a href="{{ route('marketplace.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Marketplace</a>
             @auth
                 @can('mengajukan adopsi')
                     <a href="{{ route('adopsi.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Adopsi saya</a>
                 @endcan
                 @can('kelola hewan')
-                    <a href="{{ route('admin.hewan.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Kelola hewan</a>
+                    <a href="{{ route(Auth::user()->can('akses area admin') ? 'admin.hewan.index' : 'petugas.hewan.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Kelola hewan</a>
                 @endcan
                 @can('kelola kategori')
                     <a href="{{ route('admin.kategori.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Kategori</a>
                 @endcan
                 @can('kelola pengajuan adopsi')
-                    <a href="{{ route('admin.adopsi.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pengajuan</a>
+                    <a href="{{ route(Auth::user()->can('akses area admin') ? 'admin.adopsi.index' : 'petugas.adopsi.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pengajuan</a>
+                @endcan
+                @can('lihat laporan')
                     <a href="{{ route('admin.laporan.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Laporan</a>
                 @endcan
                 @can('kelola pengguna')
                     <a href="{{ route('admin.pengguna.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pengguna</a>
                 @endcan
-                @can('melihat riwayat adopsi sendiri')
-                    <a href="{{ route('laporan.customer') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Laporan saya</a>
+                @can('akses area admin')
+                    <a href="{{ route('admin.dashboard') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Area admin</a>
+                    <a href="{{ route('admin.seller-applications.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pengajuan seller</a>
+                    <a href="{{ route('admin.chat.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Chat pengguna</a>
+                @endcan
+                @can('akses area petugas')
+                    <a href="{{ route('petugas.dashboard') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Area petugas</a>
+                @endcan
+                @can('lihat chat')
+                    <a href="{{ route('chat.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Chat admin</a>
+                @endcan
+                @can('belanja produk')
+                    <a href="{{ route('cart.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Keranjang</a>
+                    <a href="{{ route('orders.index') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Pesanan saya</a>
+                @endcan
+                @can('kelola toko')
+                    <a href="{{ route('seller.dashboard') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Toko saya</a>
+                @elsecan('mengajukan menjadi seller')
+                    <a href="{{ route('seller.application.create') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Jadi seller</a>
                 @endcan
                 <a href="{{ route('syarat-ketentuan.show') }}" class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-[#68766b] hover:bg-[#f0f3ed]">Syarat &amp; Ketentuan</a>
                 <div class="mt-3 border-t border-[#e7e9e1] pt-3">

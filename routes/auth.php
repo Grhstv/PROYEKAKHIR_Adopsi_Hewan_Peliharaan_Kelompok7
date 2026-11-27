@@ -9,9 +9,16 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\WhatsAppOtpController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
+    Route::get('login/otp', [WhatsAppOtpController::class, 'create'])->name('login.otp');
+    Route::post('login/otp/send', [WhatsAppOtpController::class, 'send'])
+        ->middleware('throttle:3,1')->name('login.otp.send');
+    Route::post('login/otp/verify', [WhatsAppOtpController::class, 'verify'])
+        ->middleware('throttle:6,1')->name('login.otp.verify');
+
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 

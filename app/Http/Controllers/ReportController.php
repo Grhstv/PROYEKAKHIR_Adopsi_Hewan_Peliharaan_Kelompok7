@@ -6,7 +6,6 @@ use App\Models\Adopsi;
 use App\Models\Hewan;
 use App\Models\HewanMutation;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
@@ -34,24 +33,6 @@ class ReportController extends Controller
                 'teradopsi' => Hewan::where('status', Hewan::TERADOPSI)->count(),
                 'ditambahkan' => $mutations->where('jenis', HewanMutation::DITAMBAHKAN)->count(),
                 'dihapus' => $mutations->where('jenis', HewanMutation::DIHAPUS)->count(),
-            ],
-        ]);
-    }
-
-    public function customer(Request $request): View
-    {
-        $adopsis = $request->user()->adopsis()
-            ->with('hewan.kategori')
-            ->latest()
-            ->get();
-
-        return view('laporan.customer', [
-            'adopsis' => $adopsis,
-            'ringkasan' => [
-                Adopsi::MENUNGGU => $adopsis->where('status', Adopsi::MENUNGGU)->count(),
-                Adopsi::DISETUJUI => $adopsis->where('status', Adopsi::DISETUJUI)->count(),
-                Adopsi::DITOLAK => $adopsis->where('status', Adopsi::DITOLAK)->count(),
-                Adopsi::DIBATALKAN => $adopsis->where('status', Adopsi::DIBATALKAN)->count(),
             ],
         ]);
     }

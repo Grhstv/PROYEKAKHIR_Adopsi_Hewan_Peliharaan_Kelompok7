@@ -14,7 +14,7 @@ class UserController extends Controller
     {
         return view('admin.pengguna.index', [
             'users' => User::with('roles')->orderBy('name')->get(),
-            'roles' => Role::orderBy('name')->pluck('name'),
+            'roles' => Role::whereIn('name', ['admin', 'petugas', 'adopter'])->orderBy('name')->pluck('name'),
         ]);
     }
 
@@ -22,14 +22,17 @@ class UserController extends Controller
     public function updateRole(Request $request, User $user)
     {
         $data = $request->validate([
-            'role' => ['required', Rule::exists('roles', 'name')],
+            'role' => ['required', Rule::in(['admin', 'petugas', 'adopter'])],
         ]);
 
         if ($user->id === $request->user()->id) {
             return back()->with('error', 'Anda tidak dapat mengubah role akun Anda sendiri.');
         }
 
-        $user->syncRoles($data['role']);
+        $otherRoles = $user->getRoleNames()
+            ->reject(fn (string $role): bool => in_array($role, ['admin', 'petugas', 'adopter'], true))
+            ->all();
+        $user->syncRoles([...$otherRoles, $data['role']]);
 
         return back()->with('success', "Role {$user->name} diubah menjadi {$data['role']}.");
     }

@@ -54,11 +54,11 @@ class ReportTest extends TestCase
 
     public function test_guest_is_redirected_from_report_pages(): void
     {
-        $this->get(route('laporan.customer'))->assertRedirect(route('login'));
         $this->get(route('admin.laporan.index'))->assertRedirect(route('login'));
+        $this->get('/laporan-saya')->assertNotFound();
     }
 
-    public function test_admin_and_petugas_can_open_admin_report(): void
+    public function test_only_admin_can_open_admin_report(): void
     {
         $adopter = $this->user('adopter');
         $this->adoption($adopter, 'Mochi');
@@ -68,12 +68,14 @@ class ReportTest extends TestCase
             ->assertOk()
             ->assertSee('Laporan Pengajuan Adopsi')
             ->assertSee('Cetak / Simpan PDF')
+            ->assertSee('size: legal')
             ->assertSee('Mochi');
 
         $this->actingAs($this->user('petugas'))
             ->get(route('admin.laporan.index'))
-            ->assertOk()
-            ->assertSee('Mochi');
+            ->assertForbidden();
+
+        $this->get(route('petugas.dashboard'))->assertOk()->assertDontSee('Laporan');
     }
 
     public function test_adopter_cannot_open_admin_report(): void
@@ -104,18 +106,10 @@ class ReportTest extends TestCase
             ->assertSee('Milo');
     }
 
-    public function test_adopter_report_only_contains_their_adoptions(): void
+    public function test_adopter_cannot_open_an_individual_report(): void
     {
-        $owner = $this->user('adopter');
-        $other = $this->user('adopter');
-        $this->adoption($owner, 'Mochi Sendiri');
-        $this->adoption($other, 'Poppy Orang Lain');
-
-        $this->actingAs($owner)
-            ->get(route('laporan.customer'))
-            ->assertOk()
-            ->assertSee('Laporan Adopsi Saya')
-            ->assertSee('Mochi Sendiri')
-            ->assertDontSee('Poppy Orang Lain');
+        $this->actingAs($this->user('adopter'))
+            ->get('/laporan-saya')
+            ->assertNotFound();
     }
 }

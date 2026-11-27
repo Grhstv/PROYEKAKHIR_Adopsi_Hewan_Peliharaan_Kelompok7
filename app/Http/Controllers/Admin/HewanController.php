@@ -24,6 +24,7 @@ class HewanController extends Controller
         return view('admin.hewan.index', [
             'hewans' => $hewans,
             'kategoris' => Kategori::orderBy('nama')->get(),
+            'routePrefix' => $this->routePrefix(),
         ]);
     }
 
@@ -32,6 +33,7 @@ class HewanController extends Controller
         return view('admin.hewan.create', [
             'hewan' => new Hewan(['status' => Hewan::TERSEDIA, 'jenis_kelamin' => 'jantan']),
             'kategoris' => Kategori::orderBy('nama')->get(),
+            'routePrefix' => $this->routePrefix(),
         ]);
     }
 
@@ -53,7 +55,7 @@ class HewanController extends Controller
             'keterangan' => 'Hewan ditambahkan ke daftar shelter.',
         ]);
 
-        return redirect()->route('admin.hewan.index')->with('success', 'Data hewan ditambahkan.');
+        return redirect()->route($this->routePrefix().'.hewan.index')->with('success', 'Data hewan ditambahkan.');
     }
 
     public function edit(Hewan $hewan)
@@ -61,6 +63,7 @@ class HewanController extends Controller
         return view('admin.hewan.edit', [
             'hewan' => $hewan,
             'kategoris' => Kategori::orderBy('nama')->get(),
+            'routePrefix' => $this->routePrefix(),
         ]);
     }
 
@@ -77,7 +80,7 @@ class HewanController extends Controller
 
         $hewan->update($data);
 
-        return redirect()->route('admin.hewan.index')->with('success', 'Data hewan diperbarui.');
+        return redirect()->route($this->routePrefix().'.hewan.index')->with('success', 'Data hewan diperbarui.');
     }
 
     public function destroy(Hewan $hewan)
@@ -98,6 +101,11 @@ class HewanController extends Controller
         ]);
         $hewan->delete();
 
-        return redirect()->route('admin.hewan.index')->with('success', 'Data hewan dihapus.');
+        return redirect()->route($this->routePrefix().'.hewan.index')->with('success', 'Data hewan dihapus.');
+    }
+
+    private function routePrefix(): string
+    {
+        return request()->routeIs('petugas.*') ? 'petugas' : 'admin';
     }
 }

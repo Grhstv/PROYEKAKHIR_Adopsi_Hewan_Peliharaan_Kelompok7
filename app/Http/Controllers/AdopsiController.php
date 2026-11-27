@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AdopsiRequest;
 use App\Models\Adopsi;
 use App\Models\Hewan;
+use App\Models\TermsAndCondition;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -24,15 +25,20 @@ class AdopsiController extends Controller
             return redirect()->route('adopsi.index')->with('error', 'Anda sudah mengajukan adopsi untuk hewan ini.');
         }
 
-        return view('adopsi.create', compact('hewan'));
+        $terms = TermsAndCondition::where('key', TermsAndCondition::KEY)->value('content')
+            ?? TermsAndCondition::DEFAULT_CONTENT;
+
+        return view('adopsi.create', compact('hewan', 'terms'));
     }
 
     public function store(AdopsiRequest $request, Hewan $hewan)
     {
         $user = $request->user();
-        $data = $request->safe()->except('setuju');
+        $data = $request->safe()->except(['setuju', 'setuju_terms']);
+        $terms = TermsAndCondition::where('key', TermsAndCondition::KEY)->value('content')
+            ?? TermsAndCondition::DEFAULT_CONTENT;
 
-        $galat = DB::transaction(function () use ($user, $hewan, $data) {
+        $galat = DB::transaction(function () use ($user, $hewan, $data, $terms) {
             $h = Hewan::whereKey($hewan->id)->lockForUpdate()->firstOrFail();
 
             if ($h->status !== Hewan::TERSEDIA) {
@@ -49,9 +55,11 @@ class AdopsiController extends Controller
             }
 
             Adopsi::create($data + [
-                'user_id'  => $user->id,
+                'user_id' => $user->id,
                 'hewan_id' => $h->id,
-                'status'   => Adopsi::MENUNGGU,
+                'status' => Adopsi::MENUNGGU,
+                'terms_snapshot' => $terms,
+                'terms_accepted_at' => now(),
             ]);
 
             return null;

@@ -2,12 +2,19 @@
 
 namespace Tests\Feature\Auth;
 
+use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(RolePermissionSeeder::class);
+    }
 
     public function test_registration_screen_can_be_rendered(): void
     {
@@ -21,10 +28,12 @@ class RegistrationTest extends TestCase
         $response = $this->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'phone' => '081234567890',
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
 
+        $response->assertSessionHasNoErrors();
         $this->assertAuthenticated();
         $response->assertRedirect(route('dashboard', absolute: false));
     }

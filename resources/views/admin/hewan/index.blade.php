@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="text-xl font-semibold text-gray-800">Kelola Hewan</h2>
-            <a href="{{ route('admin.hewan.create') }}" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">+ Tambah Hewan</a>
+            <a href="{{ route($routePrefix.'.hewan.create') }}" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">+ Tambah Hewan</a>
         </div>
     </x-slot>
 
@@ -33,8 +33,8 @@
                             <td class="px-4 py-3">{{ $h->umur_label }}</td>
                             <td class="px-4 py-3"><x-badge :status="$h->status" /></td>
                             <td class="px-4 py-3 text-right whitespace-nowrap">
-                                <a href="{{ route('admin.hewan.edit', $h) }}" class="text-indigo-600 hover:underline">Ubah</a>
-                                <form method="POST" action="{{ route('admin.hewan.destroy', $h) }}" class="inline" onsubmit="return confirm('Hapus {{ e($h->nama) }}?')">
+                                <a href="{{ route($routePrefix.'.hewan.edit', $h) }}" class="text-indigo-600 hover:underline">Ubah</a>
+                                <form method="POST" action="{{ route($routePrefix.'.hewan.destroy', $h) }}" class="inline" onsubmit="return confirm('Hapus {{ e($h->nama) }}?')">
                                     @csrf
                                     @method('DELETE')
                                     <button class="ms-3 text-red-600 hover:underline">Hapus</button>

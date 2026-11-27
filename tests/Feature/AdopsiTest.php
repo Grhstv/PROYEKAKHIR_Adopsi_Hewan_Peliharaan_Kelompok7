@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Adopsi;
 use App\Models\Hewan;
 use App\Models\Kategori;
+use App\Models\TermsAndCondition;
 use App\Models\User;
 use Database\Seeders\HewanSeeder;
 use Database\Seeders\KategoriSeeder;
@@ -51,6 +52,12 @@ class AdopsiTest extends TestCase
             'alasan' => 'Saya ingin merawatnya dengan penuh kasih sayang.',
             'tempat_tinggal' => 'rumah_sendiri', 'pengalaman' => 'pernah',
             'no_telepon' => '081234567890', 'setuju' => '1',
+            'alamat_lengkap' => 'Jl. Mawar No. 10, Jakarta Selatan',
+            'persetujuan_keluarga' => '1',
+            'jadwal_perawatan' => 'Pagi dan sore setiap hari',
+            'anggaran_bulanan' => '500000',
+            'rencana_perawatan' => 'Memberi vaksin, pemeriksaan rutin, makanan sehat dan tempat tinggal aman.',
+            'setuju_terms' => '1',
         ];
     }
 
@@ -120,6 +127,31 @@ class AdopsiTest extends TestCase
             ->assertRedirect(route('adopsi.index'));
 
         $this->assertDatabaseHas('adopsis', ['user_id' => $u->id, 'hewan_id' => $h->id, 'status' => 'menunggu']);
+        $this->assertDatabaseHas('adopsis', [
+            'user_id' => $u->id,
+            'terms_snapshot' => TermsAndCondition::DEFAULT_CONTENT,
+        ]);
+        $this->assertNotNull(Adopsi::where('user_id', $u->id)->firstOrFail()->terms_accepted_at);
+    }
+
+    public function test_adopter_must_accept_the_current_terms_before_submitting(): void
+    {
+        $hewan = $this->hewan();
+        $this->actingAs($this->user('adopter'))
+            ->get(route('adopsi.create', $hewan))
+            ->assertOk()
+            ->assertSee('Syarat dan Ketentuan Adopsi');
+
+        $data = $this->dataAdopsi();
+        unset($data['setuju_terms']);
+
+        $this->actingAs($this->user('adopter'))
+            ->from(route('adopsi.create', $hewan))
+            ->post(route('adopsi.store', $hewan), $data)
+            ->assertRedirect(route('adopsi.create', $hewan))
+            ->assertSessionHasErrors('setuju_terms');
+
+        $this->assertDatabaseCount('adopsis', 0);
     }
 
     public function test_05_pengajuan_ganda_untuk_hewan_sama_ditolak()
@@ -167,13 +199,17 @@ class AdopsiTest extends TestCase
         $this->assertSame('dibatalkan', $a->fresh()->status);
     }
 
-    public function test_12_petugas_boleh_kelola_hewan_dan_pengajuan_tetapi_tidak_kategori_dan_pengguna()
+    public function test_12_petugas_area_is_separate_and_excludes_admin_features()
     {
         $petugas = $this->user('petugas');
-        $this->actingAs($petugas)->get('/admin/hewan')->assertOk();
-        $this->get('/admin/adopsi')->assertOk();
+        $this->actingAs($petugas)->get('/petugas')->assertOk()->assertSee('Dashboard Petugas');
+        $this->get('/petugas/hewan')->assertOk();
+        $this->get('/petugas/adopsi')->assertOk();
+        $this->get('/admin/hewan')->assertForbidden();
+        $this->get('/admin/adopsi')->assertForbidden();
         $this->get('/admin/kategori')->assertForbidden();
         $this->get('/admin/pengguna')->assertForbidden();
+        $this->get('/admin/laporan')->assertForbidden();
     }
 
     public function test_13_petugas_dapat_menyetujui_pengajuan()
@@ -181,7 +217,7 @@ class AdopsiTest extends TestCase
         $h = $this->hewan();
         $a = Adopsi::create($this->dataAdopsi() + ['user_id' => $this->user('adopter')->id, 'hewan_id' => $h->id, 'status' => 'menunggu']);
 
-        $this->actingAs($this->user('petugas'))->post("/admin/adopsi/{$a->id}/setujui");
+        $this->actingAs($this->user('petugas'))->post("/petugas/adopsi/{$a->id}/setujui");
 
         $this->assertSame('disetujui', $a->fresh()->status);
     }
@@ -190,6 +226,7 @@ class AdopsiTest extends TestCase
     {
         $this->post('/register', [
             'name' => 'Budi', 'email' => 'budi@example.com',
+            'phone' => '081234567890',
             'password' => 'password123', 'password_confirmation' => 'password123',
             'role' => 'admin',
         ]);

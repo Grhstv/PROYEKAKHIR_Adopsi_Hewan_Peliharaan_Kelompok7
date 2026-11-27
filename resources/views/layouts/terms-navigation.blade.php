@@ -8,6 +8,8 @@
                 <a href="{{ route('admin.syarat-ketentuan.edit') }}" class="font-medium text-[#68766b] transition hover:text-[#365b45]">
                     Edit halaman
                 </a>
+            @endcan
+            @can('lihat laporan')
                 <a href="{{ route('admin.laporan.index') }}" class="font-medium text-[#68766b] transition hover:text-[#365b45]">
                     Laporan
                 </a>

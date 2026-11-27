@@ -4,7 +4,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="mb-4 flex flex-wrap gap-2 text-sm">
             @foreach (['menunggu' => 'Menunggu', 'disetujui' => 'Disetujui', 'ditolak' => 'Ditolak', 'dibatalkan' => 'Dibatalkan', 'semua' => 'Semua'] as $v => $l)
-                <a href="{{ route('admin.adopsi.index', ['status' => $v]) }}"
+                <a href="{{ route($routePrefix.'.adopsi.index', ['status' => $v]) }}"
                    class="rounded-full px-4 py-1.5 {{ $status === $v ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 shadow' }}">{{ $l }}</a>
             @endforeach
         </div>
@@ -27,8 +27,17 @@
                         <div><dt class="text-gray-500">Telepon</dt><dd>{{ $a->no_telepon }}</dd></div>
                         <div><dt class="text-gray-500">Tempat tinggal</dt><dd>{{ str_replace('_', ' ', ucfirst($a->tempat_tinggal)) }}</dd></div>
                         <div><dt class="text-gray-500">Pengalaman</dt><dd>{{ str_replace('_', ' ', ucfirst($a->pengalaman)) }}</dd></div>
+                        <div class="sm:col-span-3"><dt class="text-gray-500">Alamat lengkap</dt><dd>{{ $a->alamat_lengkap ?? '-' }}</dd></div>
+                        <div><dt class="text-gray-500">Persetujuan keluarga</dt><dd>{{ $a->persetujuan_keluarga ? 'Disetujui' : 'Belum dicatat' }}</dd></div>
+                        <div><dt class="text-gray-500">Jadwal perawatan</dt><dd>{{ $a->jadwal_perawatan ?? '-' }}</dd></div>
+                        <div><dt class="text-gray-500">Anggaran per bulan</dt><dd>{{ $a->anggaran_bulanan === null ? '-' : 'Rp'.number_format($a->anggaran_bulanan, 0, ',', '.') }}</dd></div>
                     </dl>
                     <p class="mt-3 whitespace-pre-line rounded bg-gray-50 p-3 text-sm text-gray-700">{{ $a->alasan }}</p>
+                    <div class="mt-2 rounded bg-gray-50 p-3 text-sm">
+                        <strong>Rencana perawatan</strong>
+                        <p class="mt-1 whitespace-pre-line text-gray-700">{{ $a->rencana_perawatan ?? '-' }}</p>
+                        <p class="mt-2 text-xs text-gray-500">Syarat adopsi disetujui: {{ $a->terms_accepted_at?->format('d/m/Y H:i') ?? 'Data lama belum mencatat persetujuan' }}</p>
+                    </div>
 
                     @if ($a->catatan_admin)
                         <p class="mt-2 text-sm text-gray-600"><strong>Catatan admin:</strong> {{ $a->catatan_admin }}</p>
@@ -36,12 +45,12 @@
 
                     @if ($a->status === 'menunggu')
                         <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                            <form method="POST" action="{{ route('admin.adopsi.setujui', $a) }}" class="flex gap-2">
+                            <form method="POST" action="{{ route($routePrefix.'.adopsi.setujui', $a) }}" class="flex gap-2">
                                 @csrf
                                 <input type="text" name="catatan" placeholder="Catatan (opsional)" class="w-full rounded-md border-gray-300 text-sm">
                                 <button class="rounded-md bg-green-600 px-4 text-sm font-semibold text-white hover:bg-green-500">Setujui</button>
                             </form>
-                            <form method="POST" action="{{ route('admin.adopsi.tolak', $a) }}" class="flex gap-2">
+                            <form method="POST" action="{{ route($routePrefix.'.adopsi.tolak', $a) }}" class="flex gap-2">
                                 @csrf
                                 <input type="text" name="catatan" placeholder="Alasan penolakan (wajib)" class="w-full rounded-md border-gray-300 text-sm" required>
                                 <button class="rounded-md bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-500">Tolak</button>

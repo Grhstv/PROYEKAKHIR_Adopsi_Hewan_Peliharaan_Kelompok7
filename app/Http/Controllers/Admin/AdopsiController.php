@@ -22,7 +22,11 @@ class AdopsiController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.adopsi.index', compact('adopsis', 'status'));
+        return view('admin.adopsi.index', [
+            'adopsis' => $adopsis,
+            'status' => $status,
+            'routePrefix' => request()->routeIs('petugas.*') ? 'petugas' : 'admin',
+        ]);
     }
 
     public function setujui(Request $request, Adopsi $adopsi)

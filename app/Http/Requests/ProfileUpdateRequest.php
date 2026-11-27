@@ -3,12 +3,20 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use App\Support\PhoneNumber;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        if ($this->filled('phone')) {
+            $this->merge(['phone' => PhoneNumber::normalize($this->string('phone')->toString())]);
+        }
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -25,6 +33,12 @@ class ProfileUpdateRequest extends FormRequest
                 'email',
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
+            ],
+            'phone' => [
+                'nullable',
+                'string',
+                'regex:/^\+[1-9]\d{7,14}$/',
+                Rule::unique(User::class, 'phone')->ignore($this->user()->id),
             ],
         ];
     }

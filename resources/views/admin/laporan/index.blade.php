@@ -9,6 +9,8 @@
     </x-slot>
 
     <style>
+        @page { size: legal portrait; margin: 12mm; }
+
         @media print {
             nav, footer, header, .no-print { display: none !important; }
             body { background: white !important; }

@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'whatsapp' => [
+        'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
+        'access_token' => env('WHATSAPP_ACCESS_TOKEN'),
+        'graph_version' => env('WHATSAPP_GRAPH_VERSION', 'v22.0'),
+        'otp_template' => env('WHATSAPP_OTP_TEMPLATE', 'pethaven_login_otp'),
+        'otp_language' => env('WHATSAPP_OTP_LANGUAGE', 'id'),
+    ],
+
 ];

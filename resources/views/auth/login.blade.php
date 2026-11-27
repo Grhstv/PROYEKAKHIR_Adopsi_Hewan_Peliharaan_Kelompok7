@@ -43,5 +43,11 @@
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
+
+        <div class="mt-5 text-center">
+            <a class="text-sm font-medium text-indigo-600 underline hover:text-indigo-800" href="{{ route('login.otp') }}">
+                Masuk dengan OTP WhatsApp
+            </a>
+        </div>
     </form>
 </x-guest-layout>

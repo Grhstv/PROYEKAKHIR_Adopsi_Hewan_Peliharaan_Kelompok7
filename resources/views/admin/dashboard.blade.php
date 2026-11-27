@@ -8,6 +8,7 @@
             @foreach ([
                 ['Total hewan', $totalHewan], ['Tersedia', $totalTersedia], ['Teradopsi', $totalTeradopsi],
                 ['Pengajuan menunggu', $totalMenunggu], ['Adopter', $totalAdopter],
+                ['Seller aktif', $totalSeller], ['Pengajuan seller', $totalPengajuanSeller],
             ] as [$label, $nilai])
                 <div class="rounded-lg bg-white p-5 shadow">
                     <div class="text-3xl font-bold text-indigo-600">{{ $nilai }}</div>
@@ -31,6 +32,13 @@
                     <li class="py-3 text-gray-500">Tidak ada pengajuan yang menunggu.</li>
                 @endforelse
             </ul>
+        </div>
+
+        <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <a href="{{ route('admin.pengguna.index') }}" class="rounded-lg bg-white p-4 font-medium text-gray-800 shadow hover:bg-gray-50">Kelola pengguna dan petugas</a>
+            <a href="{{ route('admin.seller-applications.index') }}" class="rounded-lg bg-white p-4 font-medium text-gray-800 shadow hover:bg-gray-50">Tinjau pengajuan seller</a>
+            <a href="{{ route('admin.chat.index') }}" class="rounded-lg bg-white p-4 font-medium text-gray-800 shadow hover:bg-gray-50">Chat dan pengumuman</a>
+            <a href="{{ route('admin.laporan.index') }}" class="rounded-lg bg-white p-4 font-medium text-gray-800 shadow hover:bg-gray-50">Buka laporan admin</a>
         </div>
     </div>
 </x-app-layout>
